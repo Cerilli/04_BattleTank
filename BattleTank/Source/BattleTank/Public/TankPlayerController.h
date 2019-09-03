@@ -17,5 +17,8 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 
 public:
 	ATank* GetControlledTank() const;
+
+	// override BeginPlay() from parent class. In this case it's AActor
+	void BeginPlay() override;
 	
 };
