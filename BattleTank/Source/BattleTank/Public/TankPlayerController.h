@@ -26,5 +26,23 @@ public:
 	// Start the tank moving the barrel so that a shot would hit
 	// where the crosshair intersects the world
 	void AimTowardsCrosshair();
+
+private:
+	// Return an OUT parameter, true if hit landscape
+	// Out parameters work by passing references to
+	bool GetSightRayHitLocation(FVector& OutHitLocation) const;
+
+	bool GetLookVectorHitLocation(FVector LookDirection, FVector & OutHitLocation) const;
+
+	bool GetLookDirection(FVector2D ScreenLocation, FVector & LookDirection) const;
+	
+	UPROPERTY(EditAnywhere)
+	float CrossHairXLocation = 0.5;
+
+	UPROPERTY(EditAnywhere)
+	float CrossHairYLocation = 0.3;
+
+	UPROPERTY(EditAnywhere)
+	float LineTraceRange = 10000000; //cm's, so it's 10km
 	
 };
