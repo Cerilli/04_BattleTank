@@ -1,9 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
+#include "TankAimingComponent.h"
 #include "BattleTank.h"
 #include "Kismet/GameplayStatics.h"
-#include "TankAimingComponent.h"
+#include "TankBarrel.h"
+
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
@@ -15,7 +17,7 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
-void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent * BarrelToSet)
+void UTankAimingComponent::SetBarrelReference(UTankBarrel * BarrelToSet)
 {
 	Barrel = BarrelToSet;
 }
@@ -45,6 +47,15 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal(); // Turn velocity into unit vector to get launch angle
 		MoveBarrelTowards(AimDirection);
 
+		auto Time = GetWorld()->GetTimeSeconds();
+		UE_LOG(LogTemp, Warning, TEXT("%f: Aim solution found"), Time)
+
+	}
+
+	else
+	{
+		auto Time = GetWorld()->GetTimeSeconds();
+		UE_LOG(LogTemp, Warning, TEXT("%f: No aim solve found"), Time)
 	}
 }
 
@@ -55,13 +66,10 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotation = AimAsRotator - BarrelRotator;
 
-	UE_LOG(LogTemp, Warning, TEXT("AimAsRotation: %s"), *AimAsRotator.ToString())
 
-	// Move barrel the right amounbt this frame
-
+	Barrel->Elevate(5);
 
 
-	// Given a max elevation speed, and the frame time
 }
 
 
