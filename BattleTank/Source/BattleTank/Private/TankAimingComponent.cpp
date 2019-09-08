@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
+#include "BattleTank.h"
+#include "Kismet/GameplayStatics.h"
 #include "TankAimingComponent.h"
 
 // Sets default values for this component's properties
@@ -18,30 +20,48 @@ void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent * BarrelToSet
 	Barrel = BarrelToSet;
 }
 
-
-// Called when the game starts
-void UTankAimingComponent::BeginPlay()
+void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
-	Super::BeginPlay();
+	if (!Barrel) { return; } // protect pointer, always
 
-	// ...
+	FVector OutLaunchVelocity;
 	
+	// Returns location of socket, if socket not found, returns location of Barrel
+	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));  // create a socket on the fbx mesh
+
+	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity
+	(
+		this,
+		OutLaunchVelocity,
+		StartLocation,
+		HitLocation,
+		LaunchSpeed,
+		ESuggestProjVelocityTraceOption::DoNotTrace
+	);
+
+	// Calculate OutLaunchVelocity
+	if (bHaveAimSolution)
+	{
+		auto AimDirection = OutLaunchVelocity.GetSafeNormal(); // Turn velocity into unit vector to get launch angle
+		MoveBarrelTowards(AimDirection);
+
+	}
 }
 
-
-// Called every frame
-void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	// Work out difference between current barrel rotation and aim direction
+	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
+	auto AimAsRotator = AimDirection.Rotation();
+	auto DeltaRotation = AimAsRotator - BarrelRotator;
 
-	// ...
-}
+	UE_LOG(LogTemp, Warning, TEXT("AimAsRotation: %s"), *AimAsRotator.ToString())
 
-void UTankAimingComponent::AimAt(FVector HitLocation)
-{
-	auto OurTankName = GetOwner()->GetName();
-	auto BarrelLocation = Barrel->GetComponentLocation().ToString();
-	UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s from %s"), *OurTankName, *HitLocation.ToString(), *BarrelLocation);
+	// Move barrel the right amounbt this frame
+
+
+
+	// Given a max elevation speed, and the frame time
 }
 
 

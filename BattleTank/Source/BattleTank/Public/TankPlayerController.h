@@ -27,6 +27,7 @@ public:
 	// where the crosshair intersects the world
 	void AimTowardsCrosshair();
 
+
 private:
 	// Return an OUT parameter, true if hit landscape
 	// Out parameters work by passing references to
