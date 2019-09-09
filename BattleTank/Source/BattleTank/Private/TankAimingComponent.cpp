@@ -44,7 +44,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		ESuggestProjVelocityTraceOption::DoNotTrace,
 		FCollisionResponseParams::DefaultResponseParam,
 		TArray<AActor*>(),
-		true
+		false
 
 	);
 
@@ -56,7 +56,6 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 
 		auto Time = GetWorld()->GetTimeSeconds();
 		UE_LOG(LogTemp, Warning, TEXT("%f: Aim solution found"), Time)
-
 	}
 
 	else
@@ -72,11 +71,8 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotation = AimAsRotator - BarrelRotator;
-
-
-	Barrel->Elevate(5);
-
-
+	
+	Barrel->Elevate(DeltaRotation.Pitch);
 }
 
 
