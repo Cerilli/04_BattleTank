@@ -40,13 +40,13 @@ private:
 
 	bool GetLookDirection(FVector2D ScreenLocation, FVector & LookDirection) const;
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float CrossHairXLocation = 0.5;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float CrossHairYLocation = 0.3;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float LineTraceRange = 10000000; //cm's, so it's 10km
 	
 };

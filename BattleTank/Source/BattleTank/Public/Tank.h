@@ -20,7 +20,6 @@ class BATTLETANK_API ATank : public APawn
 public:
 	void AimAt(FVector HitLocation);
 
-
 	UFUNCTION(BlueprintCallable, Category = Firing)
 	void Fire();
 
@@ -43,12 +42,17 @@ private:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UPROPERTY(EditAnywhere, Category = Firing)
-	float LaunchSpeed = 4000; // TODO find sensible default
-
-	UPROPERTY(EditAnywhere, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
 	TSubclassOf<AProjectile> ProjectileBlueprint; // This protects us instead of just using UClass*, makes it so you can only choose the right class
 		
 	// Local barrel reference for spawning projectile
 	UTankBarrel* Barrel = nullptr; 
+
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	float ReloadTimeInSeconds = 3;
+
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	float LaunchSpeed = 4000; // TODO find sensible default
+
+	double LastFireTime = 0;
 };
