@@ -6,30 +6,44 @@
 
 
 void UTankMovementComponent::Initialise(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet)
-{
-	if (!LeftTrackToSet || !RightTrackToSet) { return; }
-
+{	
 	LeftTrack = LeftTrackToSet;
 	RightTrack = RightTrackToSet;	
 }
 
 void UTankMovementComponent::IntendMoveForward(float Throw)
 {
+	if (!LeftTrack || !RightTrack) { return; }
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(Throw);
 
 	//TODO Prevent Double speed due to double input
-
 }
 
 void UTankMovementComponent::IntendTurnRight(float Throw)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Turn right: %f"), Throw)
-	
+	if (!LeftTrack || !RightTrack) { return; }
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(-Throw);
 
 	//TODO Prevent Double speed due to double input
-
 }
 
+void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed)
+{
+	// No need to call super, as we're replacing the functionality here
+
+	auto TankForward = GetOwner()->GetActorForwardVector().GetSafeNormal();
+	auto AIForwardInention = MoveVelocity.GetSafeNormal();	
+	
+	auto RightDirection = FVector::CrossProduct(TankForward, AIForwardInention).Z;
+	auto ForwardDirection = FVector::DotProduct(TankForward, AIForwardInention);	
+
+	IntendTurnRight(RightDirection);
+	IntendMoveForward(ForwardDirection);
+
+	//UE_LOG(LogTemp, Warning, TEXT("Dot Product: %f"), ForwardDirection)
+	//UE_LOG(LogTemp, Warning, TEXT("Cross Product: %f"), RightDirection)
+
+	//UE_LOG(LogTemp, Warning, TEXT("%s vectoring to %s"), *TankName, *MoveVelocityString)
+}

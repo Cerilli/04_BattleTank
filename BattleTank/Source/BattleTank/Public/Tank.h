@@ -30,6 +30,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetTurretReference(UTankTurret* TurretToSet);
 
+	UPROPERTY(EditAnywhere, Category = Firing)
+	bool bCanFire = true;
+
 protected:
 	UTankAimingComponent* TankAimingComponent = nullptr;
 	
