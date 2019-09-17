@@ -16,8 +16,6 @@ void UTankMovementComponent::IntendMoveForward(float Throw)
 	if (!LeftTrack || !RightTrack) { return; }
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(Throw);
-
-	//TODO Prevent Double speed due to double input
 }
 
 void UTankMovementComponent::IntendTurnRight(float Throw)
@@ -25,8 +23,6 @@ void UTankMovementComponent::IntendTurnRight(float Throw)
 	if (!LeftTrack || !RightTrack) { return; }
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(-Throw);
-
-	//TODO Prevent Double speed due to double input
 }
 
 void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed)
@@ -44,6 +40,4 @@ void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool
 
 	//UE_LOG(LogTemp, Warning, TEXT("Dot Product: %f"), ForwardDirection)
 	//UE_LOG(LogTemp, Warning, TEXT("Cross Product: %f"), RightDirection)
-
-	//UE_LOG(LogTemp, Warning, TEXT("%s vectoring to %s"), *TankName, *MoveVelocityString)
 }

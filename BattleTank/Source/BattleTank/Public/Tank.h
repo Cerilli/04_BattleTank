@@ -34,6 +34,7 @@ public:
 	bool bCanFire = true;
 
 protected:
+	UPROPERTY(BlueprintReadOnly)
 	UTankAimingComponent* TankAimingComponent = nullptr;
 	
 	UPROPERTY(BlueprintReadOnly)

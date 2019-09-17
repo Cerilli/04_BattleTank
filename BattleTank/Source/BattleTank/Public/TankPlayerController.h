@@ -19,8 +19,6 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
-	ATank* GetControlledTank() const;
-
 	// override BeginPlay() from parent class. In this case it's AActor
 	void BeginPlay() override;
 
@@ -30,6 +28,9 @@ public:
 	// where the crosshair intersects the world
 	void AimTowardsCrosshair();
 
+protected:
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	ATank* GetControlledTank() const;
 
 private:
 	// Return an OUT parameter, true if hit landscape
@@ -47,6 +48,5 @@ private:
 	float CrossHairYLocation = 0.3;
 
 	UPROPERTY(EditDefaultsOnly)
-	float LineTraceRange = 10000000; //cm's, so it's 10km
-	
+	float LineTraceRange = 10000000; //cm's, so it's 10km	
 };
