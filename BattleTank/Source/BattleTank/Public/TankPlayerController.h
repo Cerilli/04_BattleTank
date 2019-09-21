@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Stinner
 
 #pragma once
 
@@ -6,12 +6,14 @@
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"  //generated.h must be last include
 
-/**
- * 
- */
 
 // Forward declaration
 class ATank;
+class UTankAimingComponent;
+
+/**
+ * Tank controller stuff
+ */
 
 UCLASS()
 class BATTLETANK_API ATankPlayerController : public APlayerController
@@ -31,6 +33,10 @@ public:
 protected:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	ATank* GetControlledTank() const;
+
+	// Create an event that passes out the Tank Aiming component	
+	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+	void FoundAimingComponent(UTankAimingComponent* AimingCompRef);
 
 private:
 	// Return an OUT parameter, true if hit landscape

@@ -21,20 +21,23 @@ ATank::ATank()
 // Called when the game starts or when spawned
 void ATank::BeginPlay()
 {
-	Super::BeginPlay();	
+	Super::BeginPlay();	// Needed for Tank BP to run!
 }
 
 
 void ATank::AimAt(FVector HitLocation)
 {
+	if (!ensure(TankAimingComponent)) { return; }
 	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 }
 
 void ATank::Fire()
 {
+	if (!ensure(Barrel)) { return; }
+
 	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
 	
-	if (Barrel && isReloaded)
+	if (isReloaded)
 	{
 		//Spawn a projectile at the socket location on the barrel
 		FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
