@@ -6,11 +6,7 @@
 #include "AIController.h"
 #include "TankAIController.generated.h" //generated.h must be last include
 
-/**
- * 
- */
-
-//Forward declarations
+class UTankAimingComponent;
 
 UCLASS()
 class BATTLETANK_API ATankAIController : public AAIController
@@ -24,4 +20,7 @@ private:
 
 	// How close the ai tank can get to the player
 	float AcceptanceRadius = 300.f;
+
+	APawn* ControlledTank = nullptr;
+	UTankAimingComponent* AimingComponent = nullptr;
 };

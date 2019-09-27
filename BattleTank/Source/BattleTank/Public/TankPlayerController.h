@@ -38,9 +38,7 @@ private:
 	// Return an OUT parameter, true if hit landscape
 	// Out parameters work by passing references to
 	bool GetSightRayHitLocation(FVector& OutHitLocation) const;
-
 	bool GetLookVectorHitLocation(FVector LookDirection, FVector & OutHitLocation) const;
-
 	bool GetLookDirection(FVector2D ScreenLocation, FVector & LookDirection) const;
 	
 	UPROPERTY(EditDefaultsOnly)
@@ -51,4 +49,6 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	float LineTraceRange = 10000000; //cm's, so it's 10km	
+
+	UTankAimingComponent* AimingComponent = nullptr;
 };
