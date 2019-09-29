@@ -47,7 +47,7 @@ void UTankTrack::DriveTrack()
 {
 	// TODO clamp actual throttle value
 	auto ForceApplied = GetForwardVector() * CurrentThrottle * TrackMaxDrivingForce;
-	auto ForceLocation = GetComponentLocation();
+	auto ForceLocation = GetComponentLocation() + FVector(0.f, 0.f, 60.f);
 	auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
 	TankRoot->AddForceAtLocation(ForceApplied, ForceLocation);
 }
