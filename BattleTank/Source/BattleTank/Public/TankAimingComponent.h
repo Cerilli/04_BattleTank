@@ -49,6 +49,7 @@ private:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 	void MoveBarrelTowards(FVector AimDirection);
+	bool IsBarrelMoving();
 
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
@@ -61,9 +62,8 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float ReloadTimeInSeconds = 3;
-
-
-
+	
 	double LastFireTime = 0;
-		
+	
+	FVector AimDirection;
 };
