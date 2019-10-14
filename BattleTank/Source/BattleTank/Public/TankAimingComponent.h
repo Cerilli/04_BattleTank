@@ -38,6 +38,8 @@ public:
 	UPROPERTY(EditAnywhere, Category = Firing)
 	bool bCanFire = true;
 
+	EFiringState GetFiringState() const;
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
 	EFiringState FiringState = EFiringState::RELOADING;
