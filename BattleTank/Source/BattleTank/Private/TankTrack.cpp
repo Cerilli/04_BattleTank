@@ -49,8 +49,6 @@ void UTankTrack::DriveTrack()
 	auto ForceApplied = GetForwardVector() * CurrentThrottle * TrackMaxDrivingForce;
 	auto ForceLocation = GetComponentLocation() + FVector(0.f, 0.f, 60.f);
 	auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
-	
-	UE_LOG(LogTemp, Warning, TEXT("Force Applied: %v"), ForceApplied)
 
 	TankRoot->AddForceAtLocation(ForceApplied, ForceLocation);
 }
