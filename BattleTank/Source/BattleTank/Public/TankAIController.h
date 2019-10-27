@@ -19,9 +19,11 @@ protected:
 	float AcceptanceRadius = 8000.f;
 
 private:
-	virtual void BeginPlay() override;
-	
+	virtual void BeginPlay() override;	
 	virtual void Tick(float DeltaTime) override;
+
+	// Gets called when controller is possesed 
+	virtual void SetPawn(APawn* InPawn) override;
 
 	APawn* ControlledTank = nullptr;
 	UTankAimingComponent* AimingComponent = nullptr;
