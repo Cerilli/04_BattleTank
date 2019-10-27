@@ -3,6 +3,7 @@
 
 #include "TankPlayerController.h"
 #include "TankAimingComponent.h"
+#include "Tank.h"
 
 
 void ATankPlayerController::BeginPlay()
@@ -20,6 +21,18 @@ void ATankPlayerController::BeginPlay()
 	FoundAimingComponent(AimingComponent);
 }
 
+void ATankPlayerController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+
+	if (InPawn)
+	{
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossessedTank)) { return; }
+
+		PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankPlayerController::OnPossessedTankDeath);
+	}
+}
 
 void ATankPlayerController::Tick(float DeltaTime)
 {
@@ -41,6 +54,13 @@ void ATankPlayerController::AimTowardsCrosshair()
 	{
 		AimingComponent->AimAt(HitLocation);
 	}
+}
+
+void ATankPlayerController::OnPossessedTankDeath()
+{
+	UE_LOG(LogTemp, Warning, TEXT("PLAYER DEAD"))
+	
+	StartSpectatingOnly();
 }
 
 // We're passing a reference of HitLocation into this function, and then we will change the value of HitLocation

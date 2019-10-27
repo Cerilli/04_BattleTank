@@ -22,6 +22,9 @@ private:
 	virtual void BeginPlay() override;	
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION()
+	void OnPossessedTankDeath();
+	
 	// Gets called when controller is possesed 
 	virtual void SetPawn(APawn* InPawn) override;
 
