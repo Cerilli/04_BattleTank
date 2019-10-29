@@ -28,8 +28,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	UPROPERTY(VisibleAnywhere, Category = "Setup")
-	UStaticMeshComponent* Mass = nullptr;
+	void SetupConstraint();
 
 	UPROPERTY(VisibleAnywhere, Category = "Setup")
 	UStaticMeshComponent* Wheel = nullptr;

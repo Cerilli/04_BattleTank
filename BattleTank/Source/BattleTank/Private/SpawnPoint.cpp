@@ -3,6 +3,9 @@
 
 #include "SpawnPoint.h"
 #include "GameFramework/Actor.h"
+#include "Engine/World.h"
+#include "Kismet/GameplayStatics.h"
+
 
 // Sets default values for this component's properties
 USpawnPoint::USpawnPoint()
@@ -20,11 +23,16 @@ void USpawnPoint::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto NewActor = GetWorld()->SpawnActor<AActor>(SpawnClass);
+	//auto NewActor = GetWorld()->SpawnActor<AActor>(SpawnClass);
+	// Use SpawnActorDeferred to spawn the actor, but then finish it after begin play. Or something. 
+	// I don't fully understand this issue or why we have to do this
+	// Something to do with getting attach parent actor in SprungWheel.cpp
+	auto NewActor = GetWorld()->SpawnActorDeferred<AActor>(SpawnClass, GetComponentTransform());
 
 	if (!NewActor) { return; }
 
-	NewActor->AttachToComponent(this, FAttachmentTransformRules::KeepRelativeTransform);
+	NewActor->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
+	UGameplayStatics::FinishSpawningActor(NewActor, GetComponentTransform());
 	
 }
 
