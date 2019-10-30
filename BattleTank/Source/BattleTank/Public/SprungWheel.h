@@ -8,6 +8,7 @@
 
 class UStaticMeshComponent;
 class UPhysicsConstraintComponent;
+class USphereComponent;
 
 
 UCLASS()
@@ -31,10 +32,16 @@ private:
 	void SetupConstraint();
 
 	UPROPERTY(VisibleAnywhere, Category = "Setup")
-	UStaticMeshComponent* Wheel = nullptr;
+	USphereComponent* Wheel = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Setup")
+	USphereComponent* Axle = nullptr;
 
 	UPROPERTY(VisibleAnywhere, Category = "Setup")
 	UPhysicsConstraintComponent* PhysicsConstraint = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Setup")
+	UPhysicsConstraintComponent* AxleWheelConstraint = nullptr;
 
 
 };
