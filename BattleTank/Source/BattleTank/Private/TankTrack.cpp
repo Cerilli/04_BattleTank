@@ -3,6 +3,8 @@
 
 #include "TankTrack.h"
 #include "Components\PrimitiveComponent.h"
+#include "SprungWheel.h"
+#include "SpawnPoint.h"
 
 UTankTrack::UTankTrack()
 {
@@ -11,18 +13,21 @@ UTankTrack::UTankTrack()
 
 void UTankTrack::BeginPlay()
 {
-	Super::BeginPlay();
-	OnComponentHit.AddDynamic(this, &UTankTrack::OnHit);
+	//Super::BeginPlay();
+
+	// DEPRECATED - by spring wheel technique
+	// OnComponentHit.AddDynamic(this, &UTankTrack::OnHit);  
 }
 
 void UTankTrack::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
-	DriveTrack();
-	ApplySidewaysForce();
-	CurrentThrottle = 0;
+	// No longer wanted on hit after spring wheel technique. Used in SetThrottle instead
+	// DriveTrack(); 
+	// ApplySidewaysForce();
+	// CurrentThrottle = 0;  --No longer a member variable
 }
 
-
+// DEPRECATED - This method is completely deprecated by using the Spring Wheel technique instead
 void UTankTrack::ApplySidewaysForce()
 {
 	// Calculate the sideways slippage speed (using dot product)
@@ -40,15 +45,49 @@ void UTankTrack::ApplySidewaysForce()
 
 void UTankTrack::SetThrottle(float Throttle)
 {
-	CurrentThrottle = FMath::Clamp<float>(CurrentThrottle + Throttle, -1, 1);
+	float CurrentThrottle = FMath::Clamp<float>(Throttle, -1, 1);
+	//UE_LOG(LogTemp, Warning, TEXT("CurrentThrottle: %f"), CurrentThrottle)
+	DriveTrack(CurrentThrottle);
 }
 
-void UTankTrack::DriveTrack()
+void UTankTrack::DriveTrack(float CurrentThrottle)
 {
-	// TODO clamp actual throttle value
-	auto ForceApplied = GetForwardVector() * CurrentThrottle * TrackMaxDrivingForce;
-	auto ForceLocation = GetComponentLocation() + FVector(0.f, 0.f, 60.f);
-	auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
 
-	TankRoot->AddForceAtLocation(ForceApplied, ForceLocation);
+	// Pre spring wheel technique DEPRECATED -------------------
+	// TODO clamp actual throttle value
+	// auto ForceApplied = GetForwardVector() * CurrentThrottle * TrackMaxDrivingForce;
+	// auto ForceLocation = GetComponentLocation() + FVector(0.f, 0.f, 60.f);
+	// auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
+	// TankRoot->AddForceAtLocation(ForceApplied, ForceLocation);
+	// --------------------------------------------
+
+	// Determine the force required per wheel and apply it to each wheel found
+	auto ForceApplied = CurrentThrottle * TrackMaxDrivingForce;
+	auto Wheels = GetWheels();
+	auto ForcePerWheel = ForceApplied / Wheels.Num();
+
+	for (ASprungWheel* Wheel : Wheels)
+	{
+		Wheel->AddDrivingForce(ForcePerWheel);
+	}
+}
+
+TArray<ASprungWheel*> UTankTrack::GetWheels() const
+{
+	TArray<ASprungWheel*> ResultArray;
+	TArray<USceneComponent*> Children;
+	GetChildrenComponents(true, Children);	
+
+	for (USceneComponent* Child : Children)
+	{		
+		auto SpawnPointChild = Cast<USpawnPoint>(Child);
+		if (!SpawnPointChild) continue;
+
+		AActor* SpawnedChild = SpawnPointChild->GetSpawnedActor();
+		auto SprungWheel = Cast<ASprungWheel>(SpawnedChild);
+		if (!SprungWheel) continue;		
+
+		ResultArray.Add(SprungWheel);
+	}
+	return ResultArray;
 }

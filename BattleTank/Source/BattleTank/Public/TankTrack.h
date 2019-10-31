@@ -10,6 +10,8 @@
  * 
  */
 
+class ASprungWheel;
+
 // TankTrack is used to set maximum driving force and apply forces to the tank
 UCLASS(meta = (BlueprintSpawnableComponent))
 class BATTLETANK_API UTankTrack : public UStaticMeshComponent
@@ -22,18 +24,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void SetThrottle(float Throttle);
 
-
-
-
-
 protected:
 	virtual void BeginPlay() override;
 
 private:
 	UTankTrack();
 	void ApplySidewaysForce();
-	void DriveTrack();
-	float CurrentThrottle = 0;
+	void DriveTrack(float CurrentThrottle);
+
+	TArray<ASprungWheel*> GetWheels() const;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Movement")
 	float TrackMaxDrivingForce = 40000000.0; // Assume 40 tonne tank and 1g acceleration

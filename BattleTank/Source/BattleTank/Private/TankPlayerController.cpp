@@ -14,7 +14,7 @@ void ATankPlayerController::BeginPlay()
 
 	// Call default BeginPlay behaviour before we do anything else
 	Super::BeginPlay();
-
+	if (!GetPawn()) return;
 	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 	if (!ensure(AimingComponent)) { return; }
 	
